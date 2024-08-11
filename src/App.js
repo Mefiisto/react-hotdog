@@ -1,8 +1,8 @@
-import React from 'react';
+import React, {useCallback} from 'react';
 import './App.css';
 import Header from './Components/Header/Header.js';
 import Main from './Components/Main/Main.js';
-import { useDispatch, useSelector} from 'react-redux';
+import { useDispatch} from 'react-redux';
 import { useEffect } from 'react';
 import {Route, Routes} from 'react-router-dom';
 
@@ -15,7 +15,7 @@ function App() {
 
   const dispatch = useDispatch();
 
-  const getCategories = async () => 
+  const getCategories = useCallback(async () => 
   {
     const response = await fetch('https://product-app-cc60a-default-rtdb.firebaseio.com/react-hotdog.json');
   
@@ -24,14 +24,8 @@ function App() {
     const data = await response.json();
     console.log(data);
     dispatch(mainActions.setCategories(data.categories));
-  }
+  }, [dispatch])
 
-  const setFavorite = () => 
-  {
-    const favorite = localStorage.getItem('favorite');
-
-    if (favorite) dispatch(cartActions.setFavorite(JSON.parse(favorite)));
-  }
 
   useEffect(() => {
 
@@ -39,8 +33,13 @@ function App() {
     .catch(e => {
     });
 
-    setFavorite();
-  }, []);
+    const favorite = localStorage.getItem('favorite');
+    const history = localStorage.getItem('ordersHistory');
+
+    if (favorite) dispatch(cartActions.setFavorite(JSON.parse(favorite)));
+    if (history) dispatch(cartActions.setOrdersHistory(JSON.parse(history)));
+
+  }, [dispatch, getCategories]);
 
   return (
     <div className="App">

@@ -50,3 +50,13 @@
     width: fit-content !important;
     margin: 8px 16px 8px 0px;
 }
+
+.historyOrderItem 
+{
+
+}
+
+.historyOrderDate 
+{
+    margin-bottom: 16px;
+}

@@ -14,29 +14,29 @@ const nothingHere = <Info children="Ничего нет" />;
 
 const Header = props => 
 {
+    const categories = useSelector(state => state.main.categories);
+    
     const cart = useSelector(state => state.cart);
     const favorite = useSelector(state => state.cart.favorite);
-    const categories = useSelector(state => state.main.categories);
+    const ordersHistory = useSelector(state => state.cart.ordersHistory);
+
     const dispatch = useDispatch();
     const navigate = useNavigate();
 
     const [isCartModalVisible, setIsCartModalVisible] = useState(false);
     const [isFavoriteModalVisible, setIsFavoriteModalVisible] = useState(false);
+    const [isOrderHistoryModalVisible, setIsOrderHistoryModalVisible] = useState(false);
 
     const onCartClickHandler = () => {
-        setIsCartModalVisible(true);
-    }
-    const onCloseCartClickHandler = () => {
-        setIsCartModalVisible(false);
+        setIsCartModalVisible(prevState => !prevState);
     }
     const onFavoriteClickHandler = () => 
     {
-        setIsFavoriteModalVisible((prev => !prev));
+        setIsFavoriteModalVisible((prevState => !prevState));
     }
-
-    const onMyOrdersClickHandler = () => 
+    const onOrdersHistoryClickHandler = () => 
     {
-
+        setIsOrderHistoryModalVisible(prevState => !prevState);
     }
 
     const startOrderHandler = (e) => 
@@ -90,7 +90,7 @@ const Header = props =>
     }
     const cartButtons = <div>
         {cart.totalPrice > 0 ?<Button type="primary" onClick={startOrderHandler}>Перейти к оформлению</Button> : ''}
-        <Button onClick={onCloseCartClickHandler}>Закрыть</Button>
+        <Button onClick={onCartClickHandler}>Закрыть</Button>
     </div>
 
     const favoriteContent = favorite.length > 0 ? favorite.map((item) => 
@@ -123,7 +123,35 @@ const Header = props =>
         />
     }) : nothingHere;
 
-    const ordersContent = <div></div>;
+    const ordersHistoryContent = () => {
+        return ordersHistory.map(orderItem => {
+            
+            const orderContentList = [];
+            const orderDetails = orderItem.order;
+
+            for(const orderCategory in orderDetails)
+            {
+                const orderPart = orderDetails[orderCategory];
+                if(orderPart)
+                {
+                    const orderContent = <Card 
+                            key={orderPart.id}
+                            type="horizontal" 
+                            item={orderPart}
+                            disableButtons={true}
+                        />;
+    
+                    orderContentList.push(orderContent);
+                }
+                
+            }
+            const orderDate = new Date(orderItem.date)
+            return <div key={orderItem.name} className={classes.historyOrderItem}>
+                <span className={classes.historyOrderDate}>Заказ от {`${orderDate.getDate()}.${orderDate.getMonth()}.${orderDate.getFullYear()}`}</span>
+                {orderContentList}
+            </div>;
+        });
+    }
 
     return (
         <div className={classes.header}>
@@ -137,8 +165,8 @@ const Header = props =>
 
             <div className={classes.headerButtons}>
                 <Button onClick={onFavoriteClickHandler} type="primary" className={classes.headerButton}>Избранное</Button>
-                <Button onClick={onMyOrdersClickHandler} type="primary" className={classes.headerButton}>Мои Заказы</Button>
-                <Button onClick={onCartClickHandler} onCartClickHandler type="primary" className={classes.headerButton}>Корзина</Button>
+                <Button onClick={onOrdersHistoryClickHandler} type="primary" className={classes.headerButton}>Мои Заказы</Button>
+                <Button onClick={onCartClickHandler} type="primary" className={classes.headerButton}>Корзина</Button>
             </div>
 
             {isFavoriteModalVisible && 
@@ -151,10 +179,20 @@ const Header = props =>
                 </SidePage>
             }
 
+            {isOrderHistoryModalVisible && 
+                <SidePage 
+                    title={'Мои Заказы'} 
+                    onClose={onOrdersHistoryClickHandler}
+                    footerContent={<Button onClick={onOrdersHistoryClickHandler}>Закрыть</Button>}
+                    >
+                    {ordersHistoryContent()}
+                </SidePage>
+            }
+
             {isCartModalVisible && 
                 <SidePage 
                     title={'Корзина'} 
-                    onClose={onCloseCartClickHandler}
+                    onClose={onCartClickHandler}
                     footerContent={cartButtons}
                     >
                     {cartContent()}

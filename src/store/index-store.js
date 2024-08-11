@@ -24,44 +24,10 @@ const cartSlice = createSlice({
             sauces: undefined,
         },
         favorite: [],
-        // orders: 
+        ordersHistory: [],
         totalPrice: 0
     },
     reducers: {
-        addBun(state, action)
-        {
-            state.order.buns = action.payload.item; 
-
-            const order = state.order;
-
-            let newTotalPrice = action.payload.item.price;
-            if(order.sausages.price) newTotalPrice += order.sausages.price
-            if(order.sauces.price) newTotalPrice += order.sauces.price
-
-            state.totalPrice = newTotalPrice;
-        },
-        addSausage(state, action) {
-            state.order.sausages = action.payload.item; 
-
-            const order = state.order;
-
-            let newTotalPrice = action.payload.item.price;
-            if(order.buns.price) newTotalPrice += order.buns.price
-            if(order.sauces.price) newTotalPrice += order.sauces.price
-
-            state.totalPrice = newTotalPrice;
-        },
-        addSauces(state, action) {
-            state.order.sauces = action.payload.item; 
-            
-            const order = state.order;
-
-            let newTotalPrice = action.payload.item.price;
-            if(order.buns.price) newTotalPrice += order.buns.price
-            if(order.sausages.price) newTotalPrice += order.sausages.price
-
-            state.totalPrice = newTotalPrice;        
-        },
         addOrderItem(state, action) {
             const order = state.order;
             const payload = action.payload;
@@ -119,6 +85,27 @@ const cartSlice = createSlice({
         setFavorite(state, action)
         {
             state.favorite = action.payload;       
+        },
+        setOrdersHistory(state, action)
+        {
+            const ordersHistory = action.payload;
+ 
+            state.ordersHistory = ordersHistory;
+            // localStorage.setItem('ordersHistory', JSON.stringify(ordersHistory));
+        },
+        addHistoryOrder(state, action)
+        {
+            state.ordersHistory.push(action.payload);
+
+            localStorage.setItem('ordersHistory', JSON.stringify(state.ordersHistory));
+        },
+        removeHistoryOrder(state, action)
+        {
+            const orderName = action.payload;
+
+            state.ordersHistory = state.ordersHistory.filter(order => order.name !== orderName)
+
+            localStorage.setItem('ordersHistory', JSON.stringify(state.ordersHistory));
         }
     }
 });

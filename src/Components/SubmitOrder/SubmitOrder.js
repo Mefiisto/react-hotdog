@@ -227,7 +227,9 @@ const SubmitOrder = props =>
                 city: cityState.value,
                 street: streetState.value,
                 house: houseState.value
-            }
+            },
+            status: 'NEW',
+            date: new Date()
         };
 
         fetch('https://product-app-cc60a-default-rtdb.firebaseio.com/react-hotdog/orders.json', {
@@ -238,7 +240,11 @@ const SubmitOrder = props =>
         {
             setorderSubmition({orderName: data.name, isSubmited: true});
     
+            orderDetails.name = data.name;
+
             dispatch(cartActions.clearOrder());
+            dispatch(cartActions.addHistoryOrder(orderDetails))
+
         })
         .catch(e => {});
 
