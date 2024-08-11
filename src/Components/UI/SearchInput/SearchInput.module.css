@@ -1,0 +1,23 @@
+.searchInputWrapper
+{
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.searchInput
+{
+    display: block;
+    width: 100%;
+    max-width: 312px;
+    height: 38px;
+    padding: 8px 42px 8px 12px;
+    box-sizing: border-box;
+    border: 1px solid #FF8227;
+    outline: none;
+}
+
+.inputIcon
+{
+    margin-left: -32px;
+}

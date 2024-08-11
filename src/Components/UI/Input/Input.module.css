@@ -1,0 +1,38 @@
+.inputWrapper
+{
+    display: flex;
+    flex-direction: column;
+    text-align: left;
+    min-width: 312px;
+}
+.labelWrapper
+{
+    display: inline-flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.inputWrapper label
+{
+    margin-bottom: 8px;
+}
+
+.inputWrapper input
+{
+    width: 100%;
+    outline: none;
+    border: 1px solid #FFA236;
+    border-radius: 2px;
+    padding: 8px 10px;
+    box-sizing: border-box;
+}
+.invalid input
+{
+    border: 1px solid red;
+}
+
+.errorText{
+    color: red;
+    margin: 0px 0px 8px 0px;
+}

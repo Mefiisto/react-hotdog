@@ -1,0 +1,20 @@
+.buttonWithIcon
+{
+    border: 1px solid #FFA236;
+    border-radius: 8px;
+    width: 24px;
+    height: 24px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    color: #FFA236;
+    background-color: #fff;
+    cursor: pointer;
+    padding: 0;
+}
+
+.active
+{
+    border: 1px solid #FF5A49;
+
+}
